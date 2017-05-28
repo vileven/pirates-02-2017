@@ -52,6 +52,7 @@ public class SessionControllerTest {
         userRepository.deleteAll();
         final User user = userRepository.save(new User("sergey", "email@mail.ru",
                 passwordEncoder.encode("qwerty123"), LocalDateTime.now(), LocalDateTime.now()));
+        //noinspection ConstantConditions
         this.id = user.getId();
     }
 

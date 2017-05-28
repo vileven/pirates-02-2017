@@ -91,12 +91,6 @@ public class AccountService {
 
 
     @Nullable
-    public User getUserByLoginOrEmail(@NotNull String value) {
-        return userRepository.findUserByLoginOrEmail(value);
-    }
-
-
-    @Nullable
     public User getUserByLogin(@NotNull String login) {
         return userRepository.findUserByLogin(login);
     }
