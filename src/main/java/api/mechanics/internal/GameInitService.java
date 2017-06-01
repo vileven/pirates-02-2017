@@ -5,10 +5,12 @@ import api.mechanics.requests.InitGame;
 import api.websocket.RemotePointService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by Vileven on 01.06.17.
  */
+@Service
 public class GameInitService {
     @NotNull
     private final RemotePointService remotePointService;
