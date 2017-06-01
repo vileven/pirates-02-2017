@@ -14,6 +14,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import javax.naming.AuthenticationException;
 import java.io.IOException;
 
+import static api.controllers.SessionController.USER_ID;
+
 /**
  * Created by Vileven on 28.05.17.
  */
@@ -49,7 +51,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws AuthenticationException {
-        final Long userId = (Long) session.getAttributes().get("userId");
+        final Long userId = (Long) session.getAttributes().get(USER_ID);
         final User user;
         if (userId == null || (user = accountService.getUserById(userId)) == null) {
             throw new AuthenticationException("Only authenticated users allowed to play a game");

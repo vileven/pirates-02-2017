@@ -10,12 +10,13 @@ import java.time.Clock;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import static api.mechanics.Config.STEP_TIME;
+
 /**
  * Created by Vileven on 28.05.17.
  */
 @Service
 public class MechanicsExecutor implements Runnable {
-    private static final long STEP_TIME = 30;
 
     @NotNull
     private final GameMechanics gameMechanics;
