@@ -41,11 +41,13 @@ public class ServerSnapshotService {
             if (leaderStates != null && !leaderStates.isEmpty()) {
                 remotePointService.sendMessageToUser(leader.getUser().getId(), new Message("server-snap",
                         objectMapper.writeValueAsString(leaderStates)));
+                leaderStates.clear();
             }
 
             if (slaveStates != null && !slaveStates.isEmpty()) {
                 remotePointService.sendMessageToUser(slave.getUser().getId(), new Message("server-snap",
                         objectMapper.writeValueAsString(slaveStates)));
+                slaveStates.clear();
             }
         } catch (IOException ex) {
             throw new RuntimeException("Failed sending snapshot", ex);
