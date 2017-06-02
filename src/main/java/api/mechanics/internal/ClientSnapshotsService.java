@@ -1,6 +1,7 @@
 package api.mechanics.internal;
 
 import api.mechanics.GameSession;
+import api.mechanics.avatar.GameUser;
 import api.mechanics.base.ClientSnap;
 import api.services.AccountService;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +42,22 @@ public class ClientSnapshotsService {
     }
 
     public void processSnapshotsFor(GameSession gameSession) {
+        final GameUser leader = gameSession.getLeader();
 
+        final List<ClientSnap> leaderSnaps = getSnapsForUser(leader.getUser().getId());
+        if (leaderSnaps != null && !leaderSnaps.isEmpty()) {
+            for (ClientSnap snap : leaderSnaps) {
+                leader.getStates().add(snap.getState());
+            }
+        }
+
+        final GameUser slave = gameSession.getSlave();
+        final List<ClientSnap> slaveSnaps = getSnapsForUser(slave.getUser().getId());
+        if (slaveSnaps != null && !slaveSnaps.isEmpty()) {
+            for (ClientSnap snap : slaveSnaps) {
+                slave.getStates().add(snap.getState());
+            }
+        }
     }
 
     public void clear() {

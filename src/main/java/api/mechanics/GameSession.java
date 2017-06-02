@@ -20,27 +20,28 @@ public class GameSession {
     private final Long sessionId;
 
     @NotNull
-    private final GameUser first;
+    private final GameUser leader;
     @NotNull
-    private final GameUser second;
+    private final GameUser slave;
 
     private final long startTime;
 
-    public GameSession(@NotNull GameUser first, @NotNull GameUser second, long startTime) {
-        this.sessionId = ID_GENERATOR.getAndIncrement();;
-        this.first = first;
-        this.second = second;
+    public GameSession(@NotNull GameUser leader, @NotNull GameUser slave, long startTime) {
+        this.sessionId = ID_GENERATOR.getAndIncrement();
+        this.leader = leader;
+        this.slave = slave;
         this.startTime = startTime;
     }
 
+
     @NotNull
     public GameUser getEnemy(@NotNull GameUser user) {
-        if (Objects.equals(user, first)) {
-            return second;
+        if (Objects.equals(user, leader)) {
+            return slave;
         }
 
-        if (Objects.equals(user, second)) {
-            return first;
+        if (Objects.equals(user, slave)) {
+            return leader;
         }
 
         throw new IllegalArgumentException("Requested enemy for game but user not participant");
@@ -49,23 +50,23 @@ public class GameSession {
 
     @NotNull
     public GameUser getSelf(long userId) {
-        if (first.getUser().getId().equals(userId)) {
-            return first;
+        if (leader.getUser().getId().equals(userId)) {
+            return leader;
         }
-        if (second.getUser().getId().equals(userId)) {
-            return second;
+        if (slave.getUser().getId().equals(userId)) {
+            return slave;
         }
         throw new IllegalArgumentException("Request self for game but user not participate it");
     }
 
     @NotNull
-    public GameUser getFirst() {
-        return first;
+    public GameUser getLeader() {
+        return leader;
     }
 
     @NotNull
-    public GameUser getSecond() {
-        return second;
+    public GameUser getSlave() {
+        return slave;
     }
 
 

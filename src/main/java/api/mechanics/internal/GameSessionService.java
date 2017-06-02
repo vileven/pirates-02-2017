@@ -1,6 +1,7 @@
 package api.mechanics.internal;
 
 import api.mechanics.GameSession;
+import api.mechanics.avatar.GameUser;
 import api.model.User;
 import api.websocket.RemotePointService;
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +52,12 @@ public class GameSessionService {
     }
 
     public void startGame(@NotNull User first, @NotNull User second) {
+        final GameSession gameSession = new GameSession(new GameUser(first), new GameUser(second),
+                System.currentTimeMillis());
+        gameSessions.add(gameSession);
+        usersMap.put(gameSession.getLeader().getUser().getId(), gameSession);
+        usersMap.put(gameSession.getSlave().getUser().getId(), gameSession);
+        gameInitService.initGameFor(gameSession);
     }
 }
 

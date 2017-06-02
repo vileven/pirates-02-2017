@@ -21,7 +21,8 @@ public class Coords {
 
     @NotNull
     public Coords add(@NotNull Coords addition) {
-        return new Coords(x + addition.x, y + addition.y, z + addition.z);
+        return new Coords(x + addition.x, y + addition.y,
+                z + addition.z);
     }
 
 }
