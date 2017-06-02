@@ -7,6 +7,7 @@ import api.websocket.RemotePointService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.CloseStatus;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -48,7 +49,13 @@ public class GameSessionService {
     }
 
     public void notifyGameIsOver(@NotNull GameSession gameSession) {
-
+        final boolean exists = gameSessions.remove(gameSession);
+        usersMap.remove(gameSession.getLeader().getUser().getId());
+        usersMap.remove(gameSession.getSlave().getUser().getId());
+        if (exists) {
+            remotePointService.cutDownConnection(gameSession.getLeader().getUser().getId());
+            remotePointService.cutDownConnection(gameSession.getSlave().getUser().getId());
+        }
     }
 
     public void startGame(@NotNull User first, @NotNull User second) {
