@@ -92,7 +92,7 @@ public class GameController extends ApplicationController {
         return Response.ok("success");
     }
 
-    @GetMapping("/select")
+    @PostMapping("/select")
     public ResponseEntity<?> getScores(@RequestBody SelectParametersInfo info) {
         return ResponseEntity.ok(new SelectBody(selectWithParams(info.getLimit(), info.getOffset(),
                 info.getOrders(), info.getFilters()),getCount(info.getFilters())));
