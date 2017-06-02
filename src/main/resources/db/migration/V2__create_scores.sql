@@ -3,5 +3,5 @@ CREATE TABLE IF NOT EXISTS scores (
   score   BIGINT NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS idx_scores_on_user_id_scores
+CREATE INDEX  idx_scores_on_user_id_scores
   ON scores (user_id, score);
