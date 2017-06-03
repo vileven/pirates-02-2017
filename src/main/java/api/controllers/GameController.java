@@ -133,21 +133,23 @@ public class GameController extends ApplicationController {
             }
         }
 
-        if (orders != null && !orders.isEmpty()) {
-            sqlConstructor.append("ORDER BY ");
+//        if (orders != null && !orders.isEmpty()) {
+//            sqlConstructor.append("ORDER BY ");
+//
+//            for (int i = 0; i < orders.size(); i++) {
+//                sqlConstructor
+//                        .append(orders.get(i).getKey())
+//                        .append(' ')
+//                        .append(orders.get(i).getValue())
+//                ;
+//
+//                if (i != orders.size() - 1) {
+//                    sqlConstructor.append(", ");
+//                }
+//            }
+//        }
 
-            for (int i = 0; i < orders.size(); i++) {
-                sqlConstructor
-                        .append(orders.get(i).getKey())
-                        .append(' ')
-                        .append(orders.get(i).getValue())
-                ;
-
-                if (i != orders.size() - 1) {
-                    sqlConstructor.append(", ");
-                }
-            }
-        }
+        sqlConstructor.append("ORDER BY s.score ");
         sqlConstructor.append(" LIMIT ? OFFSET ?");
 
         return template.query(sqlConstructor.toString(),
