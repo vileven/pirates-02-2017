@@ -149,7 +149,7 @@ public class GameController extends ApplicationController {
 //            }
 //        }
 
-        sqlConstructor.append("ORDER BY s.score ");
+        sqlConstructor.append("ORDER BY s.score DESC");
         sqlConstructor.append(" LIMIT ? OFFSET ?");
 
         return template.query(sqlConstructor.toString(),
