@@ -79,15 +79,16 @@ public class GameController extends ApplicationController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<?> createScore(@RequestBody ValueInfo info, HttpSession session) {
+    public ResponseEntity<?> createScore(@RequestBody Score info, HttpSession session) {
         final Long userId = (Long) session.getAttribute(USER_ID);
         if (userId == null) {
             return Response.invalidSession();
         }
 
-        template.update("INSERT INTO scores (user_id, score) VALUES (?, ?) " +
+        template.update("INSERT INTO scores (user_id, score, kills, max_combo) VALUES (?, ?, ?, ?) " +
                 "ON CONFLICT (user_id) DO " +
-                "UPDATE SET score = ? ;", userId, info.getValue(), info.getValue());
+                "UPDATE SET score = EXCLUDED.score, kills = EXCLUDED.kills, max_combo = EXCLUDED.max_combo ;",
+                userId, info.score, info.kills, info.maxCombo);
 
         return Response.ok("success");
     }
@@ -102,18 +103,18 @@ public class GameController extends ApplicationController {
                                         @Nullable List<Pair<String, String>> filters) {
 
         final StringBuilder sqlConstructor = new StringBuilder();
-        sqlConstructor.append(" SELECT u.login as userlogin, s.score ")
+        sqlConstructor.append(" SELECT u.login as login, s.score, s.kills, s.max_combo ")
                 .append("FROM scores s JOIN users u ON s.user_id = u.id ");
 
         if (filters != null && !filters.isEmpty()) {
             sqlConstructor.append(" WHERE ");
             for (int i = 0; i < filters.size(); i++) {
 
-                if (filters.get(i).getKey().equals("score")) {
+                if (!filters.get(i).getKey().equals("login")) {
                     sqlConstructor
                             .append("s.")
                             .append(filters.get(i).getKey())
-                            .append(" = ")
+                            .append(" >= ")
                             .append(filters.get(i).getValue())
                     ;
                 } else {
@@ -150,7 +151,8 @@ public class GameController extends ApplicationController {
         sqlConstructor.append(" LIMIT ? OFFSET ?");
 
         return template.query(sqlConstructor.toString(),
-                (rs, rowNum) -> new Score(rs.getString("userlogin"), rs.getLong("score")),
+                (rs, rowNum) -> new Score(rs.getLong("score"), rs.getLong("kills") ,
+                        rs.getLong("max_combo"), rs.getString("login")),
                 limit, offset);
     }
 
@@ -161,11 +163,11 @@ public class GameController extends ApplicationController {
         if (filters != null && !filters.isEmpty()) {
             sqlBuilder.append(" WHERE  ");
             for (int i = 0; i < filters.size(); i++) {
-                if (filters.get(i).getKey().equals("score")) {
+                if (!filters.get(i).getKey().equals("login")) {
                     sqlBuilder
                             .append("s.")
                             .append(filters.get(i).getKey())
-                            .append(" = ")
+                            .append(" => ")
                             .append(filters.get(i).getValue())
                     ;
                 } else {
